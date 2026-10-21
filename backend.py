@@ -2,7 +2,7 @@
 
 from PySide6.QtCore import QObject, Slot
 
-from ciphers import ENGLISH, RUSSIAN, caesar
+from ciphers import ENGLISH, RUSSIAN, caesar, atbash, vigenere, xor_cipher, affine  
 
 
 class Backend(QObject):
@@ -36,28 +36,56 @@ class Backend(QObject):
 
     @Slot(str, str, result="QVariantMap")
     def process_atbash(self, text, language):
-        """Заготовка: принимает текст и язык выбранного алфавита."""
-        # У Атбаша нет ключа. Шифрование и расшифровка одинаковы,
-        # поэтому параметр decrypt здесь не нужен.
-        # TODO: добавить atbash в ciphers.py и импортировать её выше.
-        # Затем выбрать alphabet, как в process_caesar, и вызвать:
-        # result = atbash(text, alphabet)
+        alphabet = RUSSIAN if language == "Русский" else ENGLISH
+        result = atbash(text, alphabet)
         return {
-            "text": "",
-            "steps": "Шифр Атбаш пока не реализован.",
+            "text": result,
+            "steps": f"Атбаш: буквы заменены зеркально\nРезультат: {result}"
         }
 
     @Slot(str, str, str, bool, result="QVariantMap")
     def process_vigenere(self, text, key, language, decrypt):
-        """Заготовка: текст, ключевое слово, язык и режим расшифровки."""
-        # key — строка, а не число, как сдвиг у Цезаря.
-        # TODO: проверить, что ключ непустой и состоит из букв алфавита.
-        # Добавить vigenere в ciphers.py и импортировать её выше.
-        # Затем выбрать alphabet, как в process_caesar, и вызвать:
-        # result = vigenere(text, key, alphabet, decrypt)
-        # В обеих заготовках после реализации вернуть result в поле text
-        # и пояснение работы алгоритма в поле steps.
+        alphabet = RUSSIAN if language == "Русский" else ENGLISH
+        if not key or not key.isalpha():
+            return {
+                "text": "",
+                "steps": "Ошибка: ключ должен состоять только из букв."
+            }
+        result = vigenere(text, key, alphabet, decrypt)
+        action = "Расшифровка" if decrypt else "Шифрование"
         return {
-            "text": "",
-            "steps": "Шифр Виженера пока не реализован.",
+            "text": result,
+            "steps": f"{action} Виженера\nКлюч: {key}\nРезультат: {result}"
+        }
+    @Slot(str, str, bool, result="QVariantMap")
+    def process_xor(self, text, key, decrypt):
+        if not key:
+            return {
+                "text": "",
+                "steps": "Ошибка: ключ не может быть пустым."
+            }
+        result = xor_cipher(text, key)
+        action = "Расшифровка" if decrypt else "Шифрование"
+        return {
+            "text": result,
+            "steps": f"{action} XOR\nКлюч: {key}\nРезультат: {result}"
+        }
+    @Slot(str, int, int, str, bool, result="QVariantMap")
+    def process_affine(self, text, a, b, language, decrypt):
+        alphabet = RUSSIAN if language == "Русский" else ENGLISH
+        result = affine(text, a, b, alphabet, decrypt)
+        action = "Расшифровка" if decrypt else "Шифрование"
+        return {
+            "text": result,
+            "steps": f"{action} Аффинного шифра\nКлючи: a={a}, b={b}\nРезультат: {result}"
+        }
+    @Slot(str, str, bool, result="QVariantMap")
+    def process_xor(self, text, key, decrypt):
+        if not key:
+            return {"text": "", "steps": "Ошибка: ключ не может быть пустым."}
+        result = xor_cipher(text, key, decrypt)
+        action = "Расшифровка" if decrypt else "Шифрование"
+        return {
+            "text": result,
+            "steps": f"{action} XOR\nКлюч: {key}\nРезультат: {result}"
         }
