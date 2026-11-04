@@ -2,7 +2,7 @@
 
 from PySide6.QtCore import QObject, Slot
 
-from ciphers import ENGLISH, RUSSIAN, caesar, atbash, vigenere, xor_cipher, affine  
+from ciphers import ENGLISH, RUSSIAN, caesar, atbash, vigenere, xor_cipher, affine, aes_encrypt 
 
 
 class Backend(QObject):
@@ -88,4 +88,17 @@ class Backend(QObject):
         return {
             "text": result,
             "steps": f"{action} XOR\nКлюч: {key}\nРезультат: {result}"
+        }
+    @Slot(str, str, bool, result="QVariantMap")
+    def process_aes(self, text, key, decrypt):
+        if not key:
+            return {"text": "", "steps": "Ошибка: ключ не может быть пустым."}
+        
+        if decrypt:
+            return {"text": text, "steps": "Расшифровка AES пока в разработке."}
+        
+        result = aes_encrypt(text, key)
+        return {
+            "text": result,
+            "steps": f"Шифрование AES\nКлюч: {key}\nРезультат (Hex): {result}"
         }
