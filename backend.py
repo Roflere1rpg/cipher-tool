@@ -3,6 +3,8 @@
 from PySide6.QtCore import QObject, Slot
 
 from ciphers import ENGLISH, RUSSIAN, caesar, atbash, vigenere, xor_cipher, affine
+from aes_course.lessons import LESSONS, guide_text
+from aes_course.checks import check_step, process_block
 
 
 class Backend(QObject):
@@ -82,8 +84,17 @@ class Backend(QObject):
         }
     @Slot(str, str, bool, result="QVariantMap")
     def process_aes(self, text, key, decrypt):
-        """Заготовка для будущего алгоритма AES: результат пока отсутствует."""
-        return {
-            "text": "",
-            "steps": "AES пока не реализован. Шифрование и расшифровка недоступны."
-        }
+        """Обвязка готова; сами преобразования дописывает ученик в aes_course/student.py."""
+        return process_block(text, key, decrypt)
+
+    @Slot(result="QVariantList")
+    def aes_lessons(self):
+        return LESSONS
+
+    @Slot(result=str)
+    def aes_guide(self):
+        return guide_text()
+
+    @Slot(str, result="QVariantMap")
+    def check_aes_step(self, name):
+        return check_step(name)

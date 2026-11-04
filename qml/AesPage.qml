@@ -1,14 +1,9 @@
 import QtQuick
+import "../aes_course/qml"
 
 CipherPage {
-    practiceComponent: Component {
-        CipherPlaceholder {
-            cipherName: "AES"
-            description: "Шифрование и расшифровка AES пока недоступны."
-        }
-    }
+    practiceComponent: Component { AesPractice { } }
 
-    theoryText: "AES\n\n"
-        + "Алгоритм AES в приложении пока не реализован.\n\n"
-        + "Эта страница подготовлена для будущей реализации шифрования и расшифровки."
+    theoryMarkdown: true
+    theoryText: backend.aes_guide()
 }

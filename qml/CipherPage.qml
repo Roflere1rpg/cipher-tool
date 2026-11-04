@@ -7,6 +7,7 @@ ColumnLayout {
     id: page
     property Component practiceComponent
     property string theoryText: ""
+    property bool theoryMarkdown: false
     spacing: 16
 
     TabBar {
@@ -23,6 +24,6 @@ ColumnLayout {
         currentIndex: sections.currentIndex
 
         Loader { sourceComponent: page.practiceComponent }
-        TheoryPage { text: page.theoryText }
+        TheoryPage { text: page.theoryText; markdown: page.theoryMarkdown }
     }
 }
