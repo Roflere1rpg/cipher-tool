@@ -29,7 +29,7 @@ CipherPage {
             }
             Label {
                 Layout.fillWidth: true
-                text: "Формула: y = (a * x + b) mod 26. 'a' должно быть взаимно простым с размером алфавита."
+                text: "Формула: y = (a * x + b) mod N. N — размер алфавита (33 для русского, 26 для английского). 'a' должно быть взаимно простым с N."
                 wrapMode: Text.WordWrap
             }
 
@@ -68,7 +68,7 @@ CipherPage {
                 TextArea {
                     id: input
                     objectName: "inputText"
-                    placeholderText: "Например: Hello, world!"
+                    placeholderText: language.currentIndex === 0 ? "Например: Привет, мир!" : "Например: Hello, world!"
                     wrapMode: TextEdit.Wrap
                     textFormat: TextEdit.PlainText
                     selectByMouse: true
@@ -92,7 +92,8 @@ CipherPage {
                     onClicked: {
                         aSpin.value = 5
                         bSpin.value = 8
-                        input.text = "Hello, world!"
+                        // Чужой алфавит алгоритм не меняет, поэтому пример выбираем по языку.
+                        input.text = language.currentIndex === 0 ? "Привет, мир!" : "Hello, world!"
                         affinePractice.process(false)
                     }
                 }

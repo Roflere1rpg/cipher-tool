@@ -46,7 +46,7 @@ CipherPage {
                 TextField {
                     id: key
                     objectName: "keyField"
-                    placeholderText: "Например: KEY"
+                    placeholderText: language.currentIndex === 0 ? "Например: КЛЮЧ" : "Например: KEY"
                     selectByMouse: true
                     onTextChanged: vigenerePractice.resetResult()
                 }
@@ -83,7 +83,8 @@ CipherPage {
                 Button {
                     text: "Пример"
                     onClicked: {
-                        key.text = "KEY"
+                        // Ключ и текст примера должны принадлежать выбранному алфавиту.
+                        key.text = language.currentIndex === 0 ? "КЛЮЧ" : "KEY"
                         input.text = language.currentIndex === 0 ? "Привет, мир!" : "Hello, world!"
                         vigenerePractice.process(false)
                     }

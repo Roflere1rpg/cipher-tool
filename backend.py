@@ -46,12 +46,12 @@ class Backend(QObject):
     @Slot(str, str, str, bool, result="QVariantMap")
     def process_vigenere(self, text, key, language, decrypt):
         alphabet = RUSSIAN if language == "Русский" else ENGLISH
-        if not key or not key.isalpha():
-            return {
-                "text": "",
-                "steps": "Ошибка: ключ должен состоять только из букв."
-            }
-        result = vigenere(text, key, alphabet, decrypt)
+        # Алгоритм проверяет ключ, а мост показывает ошибку в пояснении:
+        # сообщение об ошибке не должно выглядеть как зашифрованный текст.
+        try:
+            result = vigenere(text, key, alphabet, decrypt)
+        except ValueError as error:
+            return {"text": "", "steps": f"Ошибка: {error}"}
         action = "Расшифровка" if decrypt else "Шифрование"
         return {
             "text": result,
@@ -60,7 +60,10 @@ class Backend(QObject):
     @Slot(str, int, int, str, bool, result="QVariantMap")
     def process_affine(self, text, a, b, language, decrypt):
         alphabet = RUSSIAN if language == "Русский" else ENGLISH
-        result = affine(text, a, b, alphabet, decrypt)
+        try:
+            result = affine(text, a, b, alphabet, decrypt)
+        except ValueError as error:
+            return {"text": "", "steps": f"Ошибка: {error}"}
         action = "Расшифровка" if decrypt else "Шифрование"
         return {
             "text": result,
@@ -68,9 +71,10 @@ class Backend(QObject):
         }
     @Slot(str, str, bool, result="QVariantMap")
     def process_xor(self, text, key, decrypt):
-        if not key:
-            return {"text": "", "steps": "Ошибка: ключ не может быть пустым."}
-        result = xor_cipher(text, key, decrypt)
+        try:
+            result = xor_cipher(text, key, decrypt)
+        except ValueError as error:
+            return {"text": "", "steps": f"Ошибка: {error}"}
         action = "Расшифровка" if decrypt else "Шифрование"
         return {
             "text": result,
