@@ -2,7 +2,7 @@
 
 from PySide6.QtCore import QObject, Slot
 
-from ciphers import ENGLISH, RUSSIAN, caesar, atbash, vigenere, xor_cipher, affine, aes_encrypt 
+from ciphers import ENGLISH, RUSSIAN, caesar, atbash, vigenere, xor_cipher, affine
 
 
 class Backend(QObject):
@@ -57,19 +57,6 @@ class Backend(QObject):
             "text": result,
             "steps": f"{action} Виженера\nКлюч: {key}\nРезультат: {result}"
         }
-    @Slot(str, str, bool, result="QVariantMap")
-    def process_xor(self, text, key, decrypt):
-        if not key:
-            return {
-                "text": "",
-                "steps": "Ошибка: ключ не может быть пустым."
-            }
-        result = xor_cipher(text, key)
-        action = "Расшифровка" if decrypt else "Шифрование"
-        return {
-            "text": result,
-            "steps": f"{action} XOR\nКлюч: {key}\nРезультат: {result}"
-        }
     @Slot(str, int, int, str, bool, result="QVariantMap")
     def process_affine(self, text, a, b, language, decrypt):
         alphabet = RUSSIAN if language == "Русский" else ENGLISH
@@ -91,14 +78,8 @@ class Backend(QObject):
         }
     @Slot(str, str, bool, result="QVariantMap")
     def process_aes(self, text, key, decrypt):
-        if not key:
-            return {"text": "", "steps": "Ошибка: ключ не может быть пустым."}
-        
-        if decrypt:
-            return {"text": text, "steps": "Расшифровка AES пока в разработке."}
-        
-        result = aes_encrypt(text, key)
+        """Заготовка для будущего алгоритма AES: результат пока отсутствует."""
         return {
-            "text": result,
-            "steps": f"Шифрование AES\nКлюч: {key}\nРезультат (Hex): {result}"
+            "text": "",
+            "steps": "AES пока не реализован. Шифрование и расшифровка недоступны."
         }

@@ -18,6 +18,7 @@ ApplicationWindow {
         TabButton { text: "XOR" }
         TabButton { text: "Атбаш" }
         TabButton { text: "Аффинный" }
+        TabButton { text: "AES" }
     }
 
     // StackLayout показывает только страницу с этим номером.
@@ -31,5 +32,6 @@ ApplicationWindow {
         XorPage { }
         AtbashPage { }
         AffinePage { }
+        AesPage { }
     }
 }
