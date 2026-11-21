@@ -3,9 +3,7 @@ import QtQuick.Controls
 
 // Общее оформление справки. Текст задаётся отдельно у каждого шифра.
 ScrollView {
-    id: page
     property alias text: theory.text
-    property bool markdown: false
     contentWidth: availableWidth
 
     TextArea {
@@ -13,7 +11,7 @@ ScrollView {
         readOnly: true
         selectByMouse: true
         wrapMode: TextEdit.Wrap
-        textFormat: page.markdown ? TextEdit.MarkdownText : TextEdit.PlainText
+        textFormat: TextEdit.PlainText
         font.pixelSize: 16
     }
 }

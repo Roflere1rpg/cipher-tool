@@ -7,11 +7,11 @@ ColumnLayout {
     id: page
     property Component practiceComponent
     property string theoryText: ""
-    property bool theoryMarkdown: false
     spacing: 16
 
     TabBar {
         id: sections
+        objectName: "cipherSections"
         Layout.fillWidth: true
         TabButton { text: "Практика" }
         TabButton { text: "Теория" }
@@ -24,6 +24,6 @@ ColumnLayout {
         currentIndex: sections.currentIndex
 
         Loader { sourceComponent: page.practiceComponent }
-        TheoryPage { text: page.theoryText; markdown: page.theoryMarkdown }
+        TheoryPage { text: page.theoryText }
     }
 }
